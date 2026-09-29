@@ -1,0 +1,6 @@
+@BSdigital_1.Server_HostAddress = http://localhost:5163
+
+GET {{BSdigital_1.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
