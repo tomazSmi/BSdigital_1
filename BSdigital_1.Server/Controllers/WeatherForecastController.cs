@@ -22,5 +22,15 @@ namespace BSdigital_1.Server.Controllers
             })
             .ToArray();
         }
+
+
+        [HttpGet("btceur/orderbook")]
+        public async Task<IActionResult> GetOrderBook(
+            CancellationToken cancellationToken)
+        {
+            var orderBook = "test";
+
+            return Ok(orderBook);
+        }
     }
 }
