@@ -74,6 +74,15 @@ export default defineComponent({
         const testText = new TextDecoder().decode(test);
         console.log('Response from orderbook:', testText);
       }
+      
+      var responseTest3 = await fetch('api/Bitstamp/btceur/orderbook/log');
+      console.log('Response from orderbook:', responseTest3);
+      if (responseTest3.ok) {
+        // Get text response from the orderbook endpoint
+        const test = await responseTest3.arrayBuffer();
+        const testText = new TextDecoder().decode(test);
+        console.log('Response from orderbook:', testText);
+      }
 
       var response = await fetch('weatherforecast');
       if (response.ok) {
