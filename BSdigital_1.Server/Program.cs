@@ -3,27 +3,6 @@ using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
 
-//string connectionString = "Data Source=mydatabase.db;";
-//SqliteConnection connection = new SqliteConnection(connectionString);
-
-//try
-//{
-//    connection.Open();
-//    string createTableSql = "CREATE TABLE IF NOT EXISTS orderBooks (id INTEGER PRIMARY KEY AUTOINCREMENT, timestamp TEXT, name TEXT, json TEXT)";
-//    SqliteCommand createTableCommand = new SqliteCommand(createTableSql, connection);
-//    createTableCommand.ExecuteNonQuery();
-
-//    Console.WriteLine("Connected to SQLite!");
-//}
-//catch (Exception ex)
-//{
-//    Console.WriteLine($"Error: {ex.Message}");
-//}
-//finally
-//{
-//    connection.Close();
-//}
-
 var builder = WebApplication.CreateBuilder(args);
 
 

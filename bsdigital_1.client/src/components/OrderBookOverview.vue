@@ -5,22 +5,6 @@ import OrderBook from './OrderBook.vue'
 import OrderBookLog from './OrderBookLog.vue';
 import BuyEstimate from './BuyEstimate.vue';
 
-// const bids = [
-//   { price: 219.31, amount: 420 },
-//   { price: 219.30, amount: 180 },
-//   { price: 219.29, amount: 735 },
-//   { price: 219.28, amount: 310 },
-//   { price: 219.27, amount: 1250 }
-// ]
-
-// const asks = [
-//   { price: 219.33, amount: 260 },
-//   { price: 219.34, amount: 540 },
-//   { price: 219.35, amount: 185 },
-//   { price: 219.36, amount: 910 },
-//   { price: 219.37, amount: 630 }
-// ]
-
 const ready = ref(false);
 const orderBookData = reactive({
   bids: [],
@@ -31,6 +15,7 @@ const activeIndex = ref(-1);
 const refreshActive = ref(false);
 
 async function getData() {
+  // Get log data
   var logResponse = await fetch('api/Bitstamp/btceur/orderbook/log');
   console.log('Response from orderbook log:', logResponse);
   if (logResponse.ok) {
@@ -42,6 +27,7 @@ async function getData() {
     console.log('orderbook log:', logData);
   }
 
+  // Get order book data
   var orderBookResponse = await fetch('api/Bitstamp/btceur/orderbook');
   console.log('Response from orderbook:', orderBookResponse);
   if (orderBookResponse.ok) {
@@ -59,13 +45,14 @@ async function getData() {
 
 getData();
 
-function refreshData() {
+function refreshDataClick() {
   ready.value = false;
   refreshActive.value = true;
   //this.$refs.orderBookLogComp.$data.activeIndex = -1; // Reset activeIndex in OrderBookLog component
   getData();
 }
 
+// If user click on a log entry, we want to stop the automatic refresh of the order book data. And show the older orderbook.
 watch(activeIndex, (newValue) => {
   console.log('Active index changed:', newValue);
   refreshActive.value = false; // Set refreshActive to false when activeIndex changes
@@ -75,9 +62,10 @@ watch(activeIndex, (newValue) => {
     orderBookData.bids = selectedEntry.bids.slice(0, 10); // Limit to first 10 bids
     orderBookData.asks = selectedEntry.asks.slice(10); // Limit to first 10 asks
     console.log('Updated order book data based on active index:', orderBookData);
-  } 
+  }
 });
 
+// Set up an interval to refresh the order book data every 3 seconds if refreshActive is true
 const intervalId = setInterval(() => {
   if (refreshActive.value) {
     getData();
@@ -94,7 +82,8 @@ onUnmounted(() => {
 <template>
   <div class="order-book-overview-main">
     <div class="order-book-log-wrapper">
-      <button class="refresh-button" :class="{ refreshActive: refreshActive }" @click="refreshData">Refresh</button>
+      <button class="refresh-button" :class="{ refreshActive: refreshActive }"
+        @click="refreshDataClick">Refresh</button>
       <h3>Log</h3>
       <OrderBookLog v-if="ready" :log="log" ref="orderBookLogComp" @update:activeIndex="activeIndex = $event" />
     </div>
