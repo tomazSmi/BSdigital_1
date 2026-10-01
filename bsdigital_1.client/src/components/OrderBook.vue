@@ -19,7 +19,7 @@
             fill="#94a3b8"
             font-size="12"
             font-weight="600">
-        ${title}
+        {{ title }}
       </text>
 
       <text :x="width - padding"
@@ -50,7 +50,7 @@
       </g>
 
       <!-- ASK rows -->
-      <g v-for="(order, index) in asks"
+      <g v-for="(order, index) in asks.slice().reverse()"
          :key="`ask-${order.price}`"
          :transform="`translate(0, ${askStartY + index * rowHeight})`">
         <!-- Depth bar -->
@@ -75,7 +75,7 @@
               fill="#e2e8f0"
               font-size="11"
               font-family="monospace">
-          {{ formatSize(order.size) }}
+          {{ formatSize(order.amount) }}
         </text>
 
         <text :x="width - padding"
@@ -156,7 +156,7 @@
               fill="#e2e8f0"
               font-size="11"
               font-family="monospace">
-          {{ formatSize(order.size) }}
+          {{ formatSize(order.amount) }}
         </text>
 
         <text :x="width - padding"
@@ -239,12 +239,12 @@
 
     width: {
       type: Number,
-      default: 420
+      default: 500
     },
 
     height: {
       type: Number,
-      default: 520
+      default: 700
     }
   })
 
@@ -288,17 +288,17 @@
 
   function cumulativeTotal(order, side, otherSide) {
     const orders = side === props.bids
-      ? side.filter(x => x.price >= order.price)
-      : side.filter(x => x.price <= order.price)
+      ? side.filter(x => x.price >= Number(order.price))
+      : side.filter(x => x.price <= Number(order.price))
 
-    return orders.reduce((sum, x) => sum + x.size, 0)
+    return orders.reduce((sum, x) => sum + Number(x.amount), 0)
   }
 
   function withTotals(orders, isBid) {
     let total = 0
 
     return orders.map(order => {
-      total += order.size
+      total += Number(order.amount)
 
       return {
         ...order,
@@ -325,16 +325,16 @@
   const bestAsk = computed(() => asks.value[0]?.price ?? 0)
 
   const spread = computed(() =>
-    Math.max(0, bestAsk.value - bestBid.value)
+    Math.max(0, Number(bestAsk.value) - Number(bestBid.value))
   )
 
   const midPrice = computed(() =>
-    (bestAsk.value + bestBid.value) / 2
+    (Number(bestAsk.value) + Number(bestBid.value)) / 2
   )
 
   const spreadBps = computed(() => {
     if (!midPrice.value) return 0
-    return (spread.value / midPrice.value) * 10_000
+    return (spread.value / midPrice.value) /* * 10_000*/
   })
 
   function depthWidth(total) {
@@ -358,7 +358,7 @@
 
   function formatSize(value) {
     return new Intl.NumberFormat('en-US', {
-      maximumFractionDigits: 0
+      maximumFractionDigits: 10
     }).format(value)
   }</script>
 
