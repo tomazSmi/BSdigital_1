@@ -63,4 +63,9 @@ function formatDate(timestamp) {
         background-color: #007bff;
         color: #fff;
     }
+    .price {
+        margin-left: 1rem;
+        /* font-weight: bold; */
+        color: rgb(245, 158, 11);
+    }
 </style>

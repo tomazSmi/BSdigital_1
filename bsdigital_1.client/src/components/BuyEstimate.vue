@@ -3,8 +3,8 @@
         <h3>Buy Estimate</h3>
         <div v-if="asks.length > 0">
             <span> Amount: </span> <input type="number" v-model.number="amount" min="0" step="0.01" />
-            <div><span> Estimated Cost: {{ calculateEstimate(amount, asks).toFixed(2) }} </span></div>
-            
+            <div> Estimated Cost: <span class="amount"> {{ calculateEstimate(amount, asks).toFixed(2) }} </span></div>
+
         </div>
     </div>
 </template>
@@ -55,5 +55,9 @@ function calculateEstimate(amount, asks) {
     background-color: #1c2833;
     color: #f8f9fa;
     margin-top: 1rem;
+}
+
+.amount {
+    color: rgb(245, 158, 11);
 }
 </style>
